@@ -1,1 +1,12 @@
 __pycache__/, venv/, .env
+# Bases de datos locales
+data/*.db
+*.sqlite3
+
+# Archivos temporales de Python y entornos virtuales
+__pycache__/
+.venv/
+
+# Archivos temporales de Microsoft Office
+~$*
+*.tmp
