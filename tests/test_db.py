@@ -39,10 +39,10 @@ class TestBaseDatos(unittest.TestCase):
             cursor.execute("SELECT id_modulo, nivel_riesgo FROM EVENTOS_SEGURIDAD ORDER BY timestamp DESC LIMIT 1")
             ultimo_evento = cursor.fetchone()
 
-            # Verificamos que la consulta no devuelva un valor vacío (ya que insertamos datos de prueba antes)
+            # Verificamos que la consulta no devuelva un valor vacío
             self.assertIsNotNone(ultimo_evento, "No se encontraron eventos en la base de datos. La tabla está vacía.")
 
 if __name__ == '__main__':
-    # Ejecuta todas las pruebas con un nivel de detalle (verbosity) alto para la consola
+    # Ejecuta todas las pruebas con un nivel de detalle
     print("--- Iniciando Suite de Pruebas Unitarias de Base de Datos ---")
     unittest.main(verbosity=2)

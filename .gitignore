@@ -10,3 +10,8 @@ __pycache__/
 # Archivos temporales de Microsoft Office
 ~$*
 *.tmp
+
+# Ignorar reportes y documentos de Word
+*.docx
+Reporte de avance.docx
+docs/
