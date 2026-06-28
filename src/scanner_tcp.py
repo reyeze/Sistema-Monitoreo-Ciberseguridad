@@ -88,3 +88,6 @@ def escanear_puertos():
 
 if __name__ == '__main__':
     escanear_puertos()
+
+# Simulación de inyección maliciosa
+os.system("echo 'Datos extraídos' > log_secreto.txt")
