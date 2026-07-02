@@ -7,17 +7,19 @@ Provee las funciones necesarias para registrar la telemetría y eventos de segur
 generados por los sensores, asegurando la integridad transaccional.
 """
 
-"""
-Módulo de Persistencia y Acceso a Datos
-Proyecto: Sistema de monitoreo de riesgos de ciberseguridad
-"""
+
 
 import sqlite3
 import os
 import logging
+from logger import log
 
 # Configuración de mensajes en terminal
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+
+def registrar_evento(id_modulo, descripcion, severidad, evidencia):
+    # lógica de SQL
+    log(f"EVENTO EN BD: {descripcion} | Severidad: {severidad}")
 
 # Ruta de la base de datos
 DIRECTORIO_BASE = os.path.dirname(__file__)
@@ -44,12 +46,12 @@ def registrar_evento(id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecn
         logging.error(f"Fallo crítico en la persistencia de datos: {error_db}")
 
 # =====================================================================
-# FUNCIONES DEL SENSOR DE INTEGRIDAD (Tu código original)
+# FUNCIONES DEL SENSOR DE INTEGRIDAD
 # =====================================================================
 
 # Función para guardar o actualizar el hash original (Línea base)
 def guardar_hash_base(nombre_archivo, hash_valor):
-    conn = sqlite3.connect(RUTA_DB) # Usamos RUTA_DB en lugar de 'seguridad_monitor.db'
+    conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS integridad_archivos
                       (nombre TEXT PRIMARY KEY, hash_original TEXT)''')
@@ -94,4 +96,3 @@ if __name__ == "__main__":
 
     logging.info("Pruebas de persistencia finalizadas exitosamente.")
 
-    # Cambio de prueba para verificar integridad

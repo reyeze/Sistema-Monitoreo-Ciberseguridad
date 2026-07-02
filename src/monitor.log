@@ -1,0 +1,56 @@
+[2026-06-27 23:40:50] Iniciando escaneo de seguridad en IP: 127.0.0.1
+[2026-06-27 23:40:53] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-06-27 23:40:54] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-06-27 23:40:54] Sondeo de disponibilidad para 127.0.0.1:80...
+[2026-06-27 23:40:56] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
+[2026-06-27 23:40:56] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-06-27 23:40:56] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-06-27 23:41:02] --- Iniciando monitoreo local de archivos ---
+[2026-06-27 23:41:02] [ALERTA] ¡Integridad comprometida en scanner_tcp.py!
+[2026-06-27 23:41:02] [ALERTA] ¡Integridad comprometida en db_manager.py!
+[2026-06-27 23:46:31] [ALERTA] ¡Integridad comprometida en scanner_tcp.py!
+[2026-06-27 23:46:31]          Esperado: f6351a0ef7c7c3f171d536c82a36fde7ffc98164ab7d125cbe1df0be49076f62
+[2026-06-27 23:46:31]          Actual:   5edb6b390264abc8c3c3ccb1b3ba9c7d8773eab4c1e4f3409eedd9cb68071e31
+[2026-06-27 23:46:31] [ALERTA] ¡Integridad comprometida en db_manager.py!
+[2026-06-27 23:46:31]          Esperado: 342dd9aebfaa88380eead543de76ecdafb936af98ef1da9bc74933994dfa41cd
+[2026-06-27 23:46:31]          Actual:   e32e48c51e9bd186638bdff34a58aa1602bedab1545207220f8afb4ad152e0a0
+[2026-06-27 23:55:18] Iniciando escaneo de seguridad en IP: 127.0.0.1
+[2026-06-27 23:55:21] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-06-27 23:55:22] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-06-27 23:55:22] Sondeo de disponibilidad para 127.0.0.1:80...
+[2026-06-27 23:55:24] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
+[2026-06-27 23:55:24] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-06-27 23:55:24] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-06-27 23:55:59] [ALERTA] ¡Integridad comprometida en scanner_tcp.py!
+[2026-06-27 23:55:59]          Esperado: f6351a0ef7c7c3f171d536c82a36fde7ffc98164ab7d125cbe1df0be49076f62
+[2026-06-27 23:55:59]          Actual:   5edb6b390264abc8c3c3ccb1b3ba9c7d8773eab4c1e4f3409eedd9cb68071e31
+[2026-06-27 23:55:59] [ALERTA] ¡Integridad comprometida en db_manager.py!
+[2026-06-27 23:55:59]          Esperado: 342dd9aebfaa88380eead543de76ecdafb936af98ef1da9bc74933994dfa41cd
+[2026-06-27 23:55:59]          Actual:   e32e48c51e9bd186638bdff34a58aa1602bedab1545207220f8afb4ad152e0a0
+[2026-06-27 23:59:10] [ALERTA] ¡Integridad comprometida en scanner_tcp.py!
+[2026-06-27 23:59:10]          Esperado: f6351a0ef7c7c3f171d536c82a36fde7ffc98164ab7d125cbe1df0be49076f62
+[2026-06-27 23:59:10]          Actual:   5edb6b390264abc8c3c3ccb1b3ba9c7d8773eab4c1e4f3409eedd9cb68071e31
+[2026-06-27 23:59:10] [ALERTA] ¡Integridad comprometida en db_manager.py!
+[2026-06-27 23:59:10]          Esperado: 342dd9aebfaa88380eead543de76ecdafb936af98ef1da9bc74933994dfa41cd
+[2026-06-27 23:59:10]          Actual:   e32e48c51e9bd186638bdff34a58aa1602bedab1545207220f8afb4ad152e0a0
+[2026-06-28 00:00:38] [ALERTA] ¡Integridad comprometida en scanner_tcp.py!
+[2026-06-28 00:00:38]          Esperado: f6351a0ef7c7c3f171d536c82a36fde7ffc98164ab7d125cbe1df0be49076f62
+[2026-06-28 00:00:38]          Actual:   5edb6b390264abc8c3c3ccb1b3ba9c7d8773eab4c1e4f3409eedd9cb68071e31
+[2026-06-28 00:00:38] [ALERTA] ¡Integridad comprometida en db_manager.py!
+[2026-06-28 00:00:38]          Esperado: 342dd9aebfaa88380eead543de76ecdafb936af98ef1da9bc74933994dfa41cd
+[2026-06-28 00:00:38]          Actual:   e32e48c51e9bd186638bdff34a58aa1602bedab1545207220f8afb4ad152e0a0
+[2026-06-28 00:05:03] [ALERTA] ¡Integridad comprometida en scanner_tcp.py!
+[2026-06-28 00:05:03]          Esperado: f6351a0ef7c7c3f171d536c82a36fde7ffc98164ab7d125cbe1df0be49076f62
+[2026-06-28 00:05:03]          Actual:   5edb6b390264abc8c3c3ccb1b3ba9c7d8773eab4c1e4f3409eedd9cb68071e31
+[2026-06-28 00:05:03] [ALERTA] ¡Integridad comprometida en db_manager.py!
+[2026-06-28 00:05:03]          Esperado: 342dd9aebfaa88380eead543de76ecdafb936af98ef1da9bc74933994dfa41cd
+[2026-06-28 00:05:03]          Actual:   e32e48c51e9bd186638bdff34a58aa1602bedab1545207220f8afb4ad152e0a0
+[2026-06-28 00:14:47] [INFO] Línea base creada para: scanner_tcp.py | Hash: 5edb6b390264abc8c3c3ccb1b3ba9c7d8773eab4c1e4f3409eedd9cb68071e31
+[2026-06-28 00:14:47] [INFO] Línea base creada para: db_manager.py | Hash: e32e48c51e9bd186638bdff34a58aa1602bedab1545207220f8afb4ad152e0a0
+[2026-06-28 00:15:33] Iniciando escaneo de seguridad en IP: 127.0.0.1
+[2026-06-28 00:15:36] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-06-28 00:15:37] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-06-28 00:15:38] Sondeo de disponibilidad para 127.0.0.1:80...
+[2026-06-28 00:15:40] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
+[2026-06-28 00:15:40] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-06-28 00:15:40] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
