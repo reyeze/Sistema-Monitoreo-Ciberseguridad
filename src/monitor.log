@@ -54,3 +54,10 @@
 [2026-06-28 00:15:40] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
 [2026-06-28 00:15:40] Sondeo de disponibilidad para 8.8.8.8:53...
 [2026-06-28 00:15:40] [UP] El servicio en 8.8.8.8:53 est· OPERATIVO.
+[2026-07-05 21:20:58] Iniciando escaneo de seguridad en IP: 127.0.0.1
+[2026-07-05 21:21:01] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-05 21:21:02] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-05 21:21:02] Sondeo de disponibilidad para 127.0.0.1:80...
+[2026-07-05 21:21:04] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
+[2026-07-05 21:21:04] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-05 21:21:04] [UP] El servicio en 8.8.8.8:53 est√° OPERATIVO.

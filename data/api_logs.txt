@@ -1,0 +1,9 @@
+[2026-07-03 23:05:44] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:48] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:50] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:51] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:51] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:51] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:52] Acceso al endpoint: /api/puertos
+[2026-07-03 23:05:58] Acceso al endpoint: /api/sistema
+[2026-07-03 23:06:05] Acceso al endpoint: /api/integridad

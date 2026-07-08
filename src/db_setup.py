@@ -86,6 +86,17 @@ def inicializar_base_datos():
                 )
             ''')
 
+# --- NUEVA TABLA: Auditoría de API ---
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS LOGS_AUDITORIA (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    endpoint TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            logging.info("Tabla LOGS_AUDITORIA creada correctamente.")
+
+
             # --- POBLADO INICIAL (SEEDING) ---
 
             cursor.execute("SELECT COUNT(*) FROM MODULOS")
