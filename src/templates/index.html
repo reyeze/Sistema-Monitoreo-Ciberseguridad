@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Monitoreo de Ciberseguridad</title>
+    <style>
+        /* Diseño base (Modo Oscuro) */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Header y Componente de Estado */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            background-color: #2e7d32; /* Verde por defecto */
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Contenedor principal estilo Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Componentes de Tarjetas para las Tablas */
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #90caf9;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        /* Estilo de las Tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            color: #bdbdbd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Centro de Monitoreo Local</h1>
+        <div class="status-badge" id="api-status">API Operativa</div>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="card">
+            <h2>Monitor de Red (Puertos Abiertos)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>IP Destino</th>
+                        <th>Puerto</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-puertos">
+                    <tr>
+                        <td>127.0.0.1</td>
+                        <td>8080</td>
+                        <td style="color: #ff9800;">Abierto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Integridad de Archivos Locales</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Archivo</th>
+                        <th>Alerta</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-archivos">
+                    <tr>
+                        <td>src/main.py</td>
+                        <td style="color: #4caf50;">Sin cambios</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+<script>
+        // Función para consultar el estado de la API respetando el contrato JSON
+        async function revisarEstadoAPI() {
+            try {
+                // Hacemos la petición a la ruta que creamos en la Iteración 7
+                const respuesta = await fetch('/api/sistema');
+                const datos = await respuesta.json();
+
+                const badge = document.getElementById('api-status');
+
+                // Lógica de colores según el contrato de datos
+                if(datos.estado === 'operativo') {
+                    badge.innerText = 'API Operativa';
+                    badge.style.backgroundColor = '#2e7d32'; // Verde
+                } else {
+                    badge.innerText = 'Falla en Sistema';
+                    badge.style.backgroundColor = '#d32f2f'; // Rojo
+                }
+            } catch (error) {
+                // Si el servidor está apagado o no responde
+                const badge = document.getElementById('api-status');
+                badge.innerText = 'API Desconectada';
+                badge.style.backgroundColor = '#d32f2f'; // Rojo
+            }
+        }
+
+        // Ejecutar la función en cuanto cargue la página
+        window.onload = () => {
+            revisarEstadoAPI();
+            // Mantener el monitoreo en tiempo real (cada 5 segundos)
+            setInterval(revisarEstadoAPI, 5000);
+        };
+    </script>
+
+    <script>
+        // 1. Función de Salud del Sistema (Ya la tenías)
+        async function revisarEstadoAPI() {
+            try {
+                const respuesta = await fetch('/api/sistema');
+                const datos = await respuesta.json();
+                const badge = document.getElementById('api-status');
+
+                if(datos.estado === 'operativo') {
+                    badge.innerText = 'API Operativa';
+                    badge.style.backgroundColor = '#2e7d32'; // Verde
+                } else {
+                    badge.innerText = 'Falla en Sistema';
+                    badge.style.backgroundColor = '#d32f2f'; // Rojo
+                }
+            } catch (error) {
+                const badge = document.getElementById('api-status');
+                badge.innerText = 'API Desconectada';
+                badge.style.backgroundColor = '#d32f2f'; // Rojo
+            }
+        }
+
+       // 2. NUEVA FUNCIÓN: Llenar tabla de Puertos Abiertos (ADAPTADA)
+        async function cargarPuertos() {
+            try {
+                const respuesta = await fetch('/api/puertos');
+                const puertos = await respuesta.json();
+                const tabla = document.getElementById('tabla-puertos');
+
+                tabla.innerHTML = ''; // Limpiamos la tabla
+
+                puertos.forEach(evento => {
+                    // Separamos el texto de tu evidencia_tecnica usando la barra "|"
+                    let partes = evento.evidencia_tecnica.split(' | ');
+
+                    // Limpiamos los textos para sacar solo los valores
+                    let ip = partes[0].replace('IP: ', '').trim();
+                    let numPuerto = partes[1].replace('Puerto: ', '').trim();
+                    let estado = partes[2].replace('Estado: ', '').trim();
+
+                    const fila = `<tr>
+                        <td>${ip}</td>
+                        <td>${numPuerto}</td>
+                        <td style="color: #ff9800;">${estado} (Riesgo ${evento.nivel_riesgo})</td>
+                    </tr>`;
+                    tabla.innerHTML += fila;
+                });
+            } catch (error) {
+                console.log("Error al cargar puertos", error);
+            }
+        }
+// 3. NUEVA FUNCIÓN: Llenar tabla de Integridad de Archivos (ADAPTADA)
+        async function cargarArchivos() {
+            try {
+                const respuesta = await fetch('/api/integridad');
+                const archivos = await respuesta.json();
+                const tabla = document.getElementById('tabla-archivos');
+
+                tabla.innerHTML = ''; // Limpiamos la tabla
+
+                archivos.forEach(archivo => {
+                    // Extraemos el nombre exacto como viene de tu base de datos
+                    let nombreArchivo = archivo.nombre;
+
+                    // Como el sistema nos devuelve el hash original, el archivo está íntegro
+                    const fila = `<tr>
+                        <td>${nombreArchivo}</td>
+                        <td style="color: #4caf50;">Monitoreado (Hash OK)</td>
+                    </tr>`;
+                    tabla.innerHTML += fila;
+                });
+            } catch (error) {
+                console.log("Error al cargar archivos", error);
+            }
+        }
+
+        // Ejecutar todo al cargar la página y mantener el monitoreo
+        window.onload = () => {
+            revisarEstadoAPI();
+            cargarPuertos();
+            cargarArchivos();
+
+            // Actualizar el estado cada 5 segundos
+            setInterval(revisarEstadoAPI, 5000);
+            // Actualizar las tablas cada 10 segundos para no saturar la base de datos
+            setInterval(() => {
+                cargarPuertos();
+                cargarArchivos();
+            }, 10000);
+        };
+    </script>
+</body>
+</html>

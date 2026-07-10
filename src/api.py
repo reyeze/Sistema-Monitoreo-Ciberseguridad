@@ -1,10 +1,13 @@
-from flask import Flask, jsonify, request
-import sqlite3
 import os
-from datetime import datetime # Importamos datetime para poner la fecha
+import sqlite3
+from datetime import datetime
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
+# ==========================================
+# CONFIGURACIÓN BASE DE DATOS
+# ==========================================
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, 'data', 'ciberseguridad.db')
 
@@ -13,24 +16,27 @@ def conectar_bd():
     conexion.row_factory = sqlite3.Row
     return conexion
 
-# --- FUNCIÓN DE AUDITORÍA (Guardar en TXT) ---
+# ==========================================
+# FUNCIÓN DE AUDITORÍA (Guardar en TXT)
+# ==========================================
 def registrar_log_auditoria(endpoint):
     """Escribe en un archivo de texto dentro de la carpeta /data."""
     try:
-        # Construimos la ruta hacia la carpeta data
         ruta_log = os.path.join(BASE_DIR, 'data', 'api_logs.txt')
-
-        # 'a' significa modo append (añadir al final)
         with open(ruta_log, "a") as f:
             fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"[{fecha}] Acceso al endpoint: {endpoint}\n")
-
     except Exception as e:
         print(f"[ERROR] No pude escribir en el archivo de log: {e}")
 
 # ==========================================
-# RUTAS DE LA API
+# RUTAS DE LA API Y FRONTEND
 # ==========================================
+
+# Ruta principal que carga tu Dashboard oscuro
+@app.route('/')
+def dashboard():
+    return render_template('index.html')
 
 @app.route('/api/sistema', methods=['GET'])
 def estado_servidor():
@@ -47,7 +53,7 @@ def obtener_puertos():
         conexion = conectar_bd()
         cursor = conexion.cursor()
 
-        # ... (aquí va tu lógica de filtros) ...
+        # Lógica de filtros y paginación
         filtro_estado = request.args.get('estado')
         filtro_riesgo = request.args.get('nivel_riesgo')
         limite = request.args.get('cantidad', default=50, type=int)
