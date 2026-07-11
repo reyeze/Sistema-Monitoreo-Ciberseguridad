@@ -91,12 +91,7 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-puertos">
-                    <tr>
-                        <td>127.0.0.1</td>
-                        <td>8080</td>
-                        <td style="color: #ff9800;">Abierto</td>
-                    </tr>
-                </tbody>
+                    </tbody>
             </table>
         </div>
 
@@ -110,51 +105,30 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-archivos">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2 style="color: #ef5350;">Centro de Alertas de Seguridad</h2>
+            <table>
+                <thead>
                     <tr>
-                        <td>src/main.py</td>
-                        <td style="color: #4caf50;">Sin cambios</td>
+                        <th>Fecha y Hora</th>
+                        <th>Tipo</th>
+                        <th>Nivel de Riesgo</th>
+                        <th>Descripción</th>
                     </tr>
-                </tbody>
+                </thead>
+                <tbody id="body-alertas">
+                    </tbody>
             </table>
         </div>
 
     </div>
-<script>
-        // Función para consultar el estado de la API respetando el contrato JSON
-        async function revisarEstadoAPI() {
-            try {
-                // Hacemos la petición a la ruta que creamos en la Iteración 7
-                const respuesta = await fetch('/api/sistema');
-                const datos = await respuesta.json();
-
-                const badge = document.getElementById('api-status');
-
-                // Lógica de colores según el contrato de datos
-                if(datos.estado === 'operativo') {
-                    badge.innerText = 'API Operativa';
-                    badge.style.backgroundColor = '#2e7d32'; // Verde
-                } else {
-                    badge.innerText = 'Falla en Sistema';
-                    badge.style.backgroundColor = '#d32f2f'; // Rojo
-                }
-            } catch (error) {
-                // Si el servidor está apagado o no responde
-                const badge = document.getElementById('api-status');
-                badge.innerText = 'API Desconectada';
-                badge.style.backgroundColor = '#d32f2f'; // Rojo
-            }
-        }
-
-        // Ejecutar la función en cuanto cargue la página
-        window.onload = () => {
-            revisarEstadoAPI();
-            // Mantener el monitoreo en tiempo real (cada 5 segundos)
-            setInterval(revisarEstadoAPI, 5000);
-        };
-    </script>
 
     <script>
-        // 1. Función de Salud del Sistema (Ya la tenías)
+        // 1. Función de Salud del Sistema
         async function revisarEstadoAPI() {
             try {
                 const respuesta = await fetch('/api/sistema');
@@ -175,36 +149,43 @@
             }
         }
 
-       // 2. NUEVA FUNCIÓN: Llenar tabla de Puertos Abiertos (ADAPTADA)
+       // 2. Función: Llenar tabla de Puertos Abiertos
         async function cargarPuertos() {
             try {
-                const respuesta = await fetch('/api/puertos');
+                // Modificamos el endpoint para pedir menos datos y no saturar
+                const respuesta = await fetch('/api/puertos?cantidad=20');
                 const puertos = await respuesta.json();
                 const tabla = document.getElementById('tabla-puertos');
 
                 tabla.innerHTML = ''; // Limpiamos la tabla
 
+                // Creamos un historial temporal para evitar pintar registros repetidos
+                let registrosVistos = new Set();
+
                 puertos.forEach(evento => {
-                    // Separamos el texto de tu evidencia_tecnica usando la barra "|"
-                    let partes = evento.evidencia_tecnica.split(' | ');
+                    // Validamos que exista el dato y que no lo hayamos visto ya
+                    if (evento.evidencia_tecnica && !registrosVistos.has(evento.evidencia_tecnica)) {
+                        registrosVistos.add(evento.evidencia_tecnica);
 
-                    // Limpiamos los textos para sacar solo los valores
-                    let ip = partes[0].replace('IP: ', '').trim();
-                    let numPuerto = partes[1].replace('Puerto: ', '').trim();
-                    let estado = partes[2].replace('Estado: ', '').trim();
+                        let partes = evento.evidencia_tecnica.split(' | ');
+                        let ip = partes[0] ? partes[0].replace('IP: ', '').trim() : 'N/A';
+                        let numPuerto = partes[1] ? partes[1].replace('Puerto: ', '').trim() : 'N/A';
+                        let estado = partes[2] ? partes[2].replace('Estado: ', '').trim() : 'N/A';
 
-                    const fila = `<tr>
-                        <td>${ip}</td>
-                        <td>${numPuerto}</td>
-                        <td style="color: #ff9800;">${estado} (Riesgo ${evento.nivel_riesgo})</td>
-                    </tr>`;
-                    tabla.innerHTML += fila;
+                        const fila = `<tr>
+                            <td>${ip}</td>
+                            <td>${numPuerto}</td>
+                            <td style="color: #ff9800;">${estado} (Riesgo ${evento.nivel_riesgo})</td>
+                        </tr>`;
+                        tabla.innerHTML += fila;
+                    }
                 });
             } catch (error) {
                 console.log("Error al cargar puertos", error);
             }
         }
-// 3. NUEVA FUNCIÓN: Llenar tabla de Integridad de Archivos (ADAPTADA)
+
+        // 3. Función: Llenar tabla de Integridad de Archivos
         async function cargarArchivos() {
             try {
                 const respuesta = await fetch('/api/integridad');
@@ -214,10 +195,7 @@
                 tabla.innerHTML = ''; // Limpiamos la tabla
 
                 archivos.forEach(archivo => {
-                    // Extraemos el nombre exacto como viene de tu base de datos
                     let nombreArchivo = archivo.nombre;
-
-                    // Como el sistema nos devuelve el hash original, el archivo está íntegro
                     const fila = `<tr>
                         <td>${nombreArchivo}</td>
                         <td style="color: #4caf50;">Monitoreado (Hash OK)</td>
@@ -229,18 +207,47 @@
             }
         }
 
+        // 4. NUEVA FUNCIÓN: Llenar tabla de Alertas (Iteración 9)
+        async function cargarAlertas() {
+            try {
+                const respuesta = await fetch('/api/alertas');
+                const alertas = await respuesta.json();
+                const tabla = document.getElementById('body-alertas');
+
+                tabla.innerHTML = ''; // Limpiamos antes de actualizar
+
+                alertas.forEach(alerta => {
+                    // Si el riesgo es Crítico lo pintamos rojo, si es Alto lo pintamos naranja
+                    let colorRiesgo = alerta.riesgo === 'Crítico' ? '#ef5350' : '#ff9800';
+
+                    const fila = `<tr>
+                        <td>${alerta.fecha}</td>
+                        <td>${alerta.tipo}</td>
+                        <td style="color: ${colorRiesgo}; font-weight: bold;">${alerta.riesgo}</td>
+                        <td>${alerta.descripcion}</td>
+                    </tr>`;
+                    tabla.innerHTML += fila;
+                });
+            } catch (error) {
+                console.log("Error al cargar alertas:", error);
+            }
+        }
+
         // Ejecutar todo al cargar la página y mantener el monitoreo
         window.onload = () => {
             revisarEstadoAPI();
             cargarPuertos();
             cargarArchivos();
+            cargarAlertas(); // Arrancamos la carga de alertas
 
             // Actualizar el estado cada 5 segundos
             setInterval(revisarEstadoAPI, 5000);
-            // Actualizar las tablas cada 10 segundos para no saturar la base de datos
+
+            // Actualizar todas las tablas cada 10 segundos
             setInterval(() => {
                 cargarPuertos();
                 cargarArchivos();
+                cargarAlertas(); // Se actualiza junto con el resto
             }, 10000);
         };
     </script>

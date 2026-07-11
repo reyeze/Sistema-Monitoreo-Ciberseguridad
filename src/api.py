@@ -33,7 +33,7 @@ def registrar_log_auditoria(endpoint):
 # RUTAS DE LA API Y FRONTEND
 # ==========================================
 
-# Ruta principal que carga tu Dashboard oscuro
+# Ruta principal que carga el Dashboard oscuro
 @app.route('/')
 def dashboard():
     return render_template('index.html')
@@ -70,7 +70,9 @@ def obtener_puertos():
             consulta += " AND nivel_riesgo = ?"
             parametros.append(filtro_riesgo)
 
-        consulta += " ORDER BY timestamp DESC LIMIT ? OFFSET ?"
+        # OPTIMIZACIÓN: Se agrega GROUP BY para eliminar repeticiones de la vista
+        # y se ordena para mantener el evento más reciente arriba.
+        consulta += " GROUP BY evidencia_tecnica ORDER BY timestamp DESC LIMIT ? OFFSET ?"
         parametros.extend([limite, salto])
 
         cursor.execute(consulta, parametros)
@@ -97,6 +99,30 @@ def obtener_integridad():
 
     except Exception as error:
         return jsonify({"error": "No se pudo conectar a la base de datos", "detalle": str(error)}), 500
+
+@app.route('/api/alertas')
+def obtener_alertas():
+    try:
+        # Asegúrate de usar la misma ruta a tu base de datos (DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        # Traemos las últimas 10 alertas ordenadas de la más reciente a la más antigua
+        cursor.execute("SELECT fecha_hora, tipo_alerta, nivel_riesgo, descripcion FROM registro_alertas ORDER BY fecha_hora DESC LIMIT 10")
+        filas = cursor.fetchall()
+        conn.close()
+
+        lista_alertas = []
+        for fila in filas:
+            lista_alertas.append({
+                "fecha": fila[0],
+                "tipo": fila[1],
+                "riesgo": fila[2],
+                "descripcion": fila[3]
+            })
+        return jsonify(lista_alertas)
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
 
 if __name__ == '__main__':
     # Cambiamos 127.0.0.1 por 0.0.0.0 para que Docker permita conexiones externas

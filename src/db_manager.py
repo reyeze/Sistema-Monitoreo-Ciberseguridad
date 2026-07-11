@@ -7,8 +7,6 @@ Provee las funciones necesarias para registrar la telemetría y eventos de segur
 generados por los sensores, asegurando la integridad transaccional.
 """
 
-
-
 import sqlite3
 import os
 import logging
@@ -17,11 +15,7 @@ from logger import log
 # Configuración de mensajes en terminal
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
-def registrar_evento(id_modulo, descripcion, severidad, evidencia):
-    # lógica de SQL
-    log(f"EVENTO EN BD: {descripcion} | Severidad: {severidad}")
-
-# Ruta de la base de datos
+# Ruta de la base de datos (Excelente manejo de rutas relativas)
 DIRECTORIO_BASE = os.path.dirname(__file__)
 RUTA_DB = os.path.join(DIRECTORIO_BASE, '..', 'data', 'ciberseguridad.db')
 
@@ -72,21 +66,45 @@ def obtener_hash_base(nombre_archivo):
     conn.close()
     return resultado[0] if resultado else None
 
-# Función para registrar alertas cuando el hash cambia
-def registrar_alerta_integridad(nombre_archivo):
+# =====================================================================
+# NUEVAS FUNCIONES DE ALERTAS (ITERACIÓN 9)
+# =====================================================================
+def crear_tabla_alertas():
+    """Crea la tabla unificada para registrar alertas de todos los módulos."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS alertas
-                      (id INTEGER PRIMARY KEY, mensaje TEXT, fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
-    cursor.execute("INSERT INTO alertas (mensaje) VALUES (?)", (f"Alteración detectada en: {nombre_archivo}",))
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS registro_alertas (
+            id_alerta INTEGER PRIMARY KEY AUTOINCREMENT,
+            tipo_alerta TEXT,
+            nivel_riesgo TEXT,
+            descripcion TEXT,
+            fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     conn.commit()
     conn.close()
+
+def registrar_alerta(tipo, riesgo, descripcion):
+    """Guarda una alerta crítica o alta detectada por el sistema."""
+    conn = sqlite3.connect(RUTA_DB)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO registro_alertas (tipo_alerta, nivel_riesgo, descripcion)
+        VALUES (?, ?, ?)
+    ''', (tipo, riesgo, descripcion))
+    conn.commit()
+    conn.close()
+    logging.warning(f"ALERTA REGISTRADA [{riesgo}]: {descripcion}")
 
 # === BLOQUE DE PRUEBA DE INTEGRACIÓN ===
 if __name__ == "__main__":
     logging.info("Iniciando prueba de lógica de persistencia...")
 
-    # Simulación 1: El Escáner TCP detecta un puerto peligroso abierto
+    # 1. Nos aseguramos de que la nueva tabla de la iteración 9 exista
+    crear_tabla_alertas()
+
+    # Simulación 1: El Escáner TCP detecta un puerto peligroso (Iteraciones pasadas)
     registrar_evento(
         id_modulo=1,
         descripcion_evento="Detección de puerto 445 (SMB) expuesto en la red local.",
@@ -94,5 +112,7 @@ if __name__ == "__main__":
         evidencia_tecnica="Puerto: 445 | Estado: OPEN | Protocolo: TCP"
     )
 
-    logging.info("Pruebas de persistencia finalizadas exitosamente.")
+    # Simulación 2: Simulando la nueva alerta clasificada (Iteración 9)
+    registrar_alerta("Red", "Alto", "Puerto abierto innecesario detectado: 445 (SMB)")
 
+    logging.info("Pruebas de persistencia finalizadas exitosamente.")

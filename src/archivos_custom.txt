@@ -1,0 +1,8 @@
+# SISTEMA DE MONITOREO - ARCHIVOS PERSONALIZADOS
+# Escribe debajo la ruta absoluta de los archivos a vigilar (una por linea).
+
+C:\Windows\System32\drivers\etc\networks
+C:\xampp\apache\conf\httpd.conf
+C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+
