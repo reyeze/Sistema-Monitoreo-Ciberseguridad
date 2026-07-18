@@ -103,7 +103,7 @@ def obtener_integridad():
 @app.route('/api/alertas')
 def obtener_alertas():
     try:
-        # Asegúrate de usar la misma ruta a tu base de datos (DB_PATH)
+        # Usar la misma ruta a tu base de datos (DB_PATH)
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         # Traemos las últimas 10 alertas ordenadas de la más reciente a la más antigua
