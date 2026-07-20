@@ -15,9 +15,10 @@ from logger import log
 # Configuración de mensajes en terminal
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
-# Ruta de la base de datos (Excelente manejo de rutas relativas)
-DIRECTORIO_BASE = os.path.dirname(__file__)
-RUTA_DB = os.path.join(DIRECTORIO_BASE, '..', 'data', 'ciberseguridad.db')
+# Ruta de la base de datos (Dinámica y absoluta para evitar bases duplicadas)
+DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
+DIRECTORIO_RAIZ = os.path.dirname(DIRECTORIO_ACTUAL)
+RUTA_DB = os.path.join(DIRECTORIO_RAIZ, 'data', 'ciberseguridad.db')
 
 # =====================================================================
 # FUNCIONES DEL ESCÁNER TCP
@@ -67,19 +68,20 @@ def obtener_hash_base(nombre_archivo):
     return resultado[0] if resultado else None
 
 # =====================================================================
-# NUEVAS FUNCIONES DE ALERTAS (ITERACIÓN 9)
+# NUEVAS FUNCIONES DE ALERTAS
 # =====================================================================
 def crear_tabla_alertas():
     """Crea la tabla unificada para registrar alertas de todos los módulos."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
+    # Alineado con la estructura de db_setup.py para mantener consistencia
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS registro_alertas (
-            id_alerta INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             tipo_alerta TEXT,
             nivel_riesgo TEXT,
             descripcion TEXT,
-            fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP
+            fecha DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     conn.commit()
@@ -101,10 +103,9 @@ def registrar_alerta(tipo, riesgo, descripcion):
 if __name__ == "__main__":
     logging.info("Iniciando prueba de lógica de persistencia...")
 
-    # 1. Nos aseguramos de que la nueva tabla de la iteración 9 exista
     crear_tabla_alertas()
 
-    # Simulación 1: El Escáner TCP detecta un puerto peligroso (Iteraciones pasadas)
+    # Simulación 1: El Escáner TCP detecta un puerto peligroso
     registrar_evento(
         id_modulo=1,
         descripcion_evento="Detección de puerto 445 (SMB) expuesto en la red local.",
@@ -112,7 +113,7 @@ if __name__ == "__main__":
         evidencia_tecnica="Puerto: 445 | Estado: OPEN | Protocolo: TCP"
     )
 
-    # Simulación 2: Simulando la nueva alerta clasificada (Iteración 9)
+    # Simulación 2: Simulando la nueva alerta clasificada
     registrar_alerta("Red", "Alto", "Puerto abierto innecesario detectado: 445 (SMB)")
 
     logging.info("Pruebas de persistencia finalizadas exitosamente.")

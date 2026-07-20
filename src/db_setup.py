@@ -2,9 +2,9 @@
 Módulo de Inicialización de Base de Datos
 Proyecto: Sistema de monitoreo de riesgos de ciberseguridad
 
-Este script se encarga de construir el esquema físico de la base de datos (SQLite3).
+Este script se encarga de construir el esquema físico de la base de datos (SQLite3)
 Crea las tablas relacionales necesarias e inserta los catálogos base para que
-el sistema pueda operar correctamente desde su primera ejecución.
+el sistema pueda operar correctamente.
 """
 
 import sqlite3
@@ -14,14 +14,16 @@ import logging
 # 1. Configuración para mostrar mensajes en la terminal
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
-# 2. Definición de rutas relativas
-DIRECTORIO_BASE = os.path.dirname(__file__)
-RUTA_DB = os.path.join(DIRECTORIO_BASE, '..', 'data', 'ciberseguridad.db')
+# 2. Definición de rutas absolutas dinámicas (Solución a bases de datos duplicadas)
+DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__)) # Ruta de src/
+DIRECTORIO_RAIZ = os.path.dirname(DIRECTORIO_ACTUAL)            # Sube un nivel a la raíz
+RUTA_DB = os.path.join(DIRECTORIO_RAIZ, 'data', 'ciberseguridad.db')
 
 def preparar_entorno():
-    """Valida y crea el directorio '/data' si no existe."""
+    """Valida y crea el directorio 'data' en la raíz si no existe."""
     carpeta_datos = os.path.dirname(RUTA_DB)
     os.makedirs(carpeta_datos, exist_ok=True)
+    logging.info(f"Directorio de datos verificado en: {carpeta_datos}")
 
 def inicializar_base_datos():
     """
@@ -30,7 +32,7 @@ def inicializar_base_datos():
     """
     preparar_entorno()
 
-    # El uso de 'with' (Manejador de Contexto) garantiza que la base de datos
+    # El uso de 'with' Manejador de Contexto garantiza que la base de datos
     # se cierre de forma segura al terminar, incluso si ocurre un error.
     try:
         with sqlite3.connect(RUTA_DB) as conexion:
@@ -86,7 +88,7 @@ def inicializar_base_datos():
                 )
             ''')
 
-# --- NUEVA TABLA: Auditoría de API ---
+            # Tabla 5: Auditoría de API
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS LOGS_AUDITORIA (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,8 +96,19 @@ def inicializar_base_datos():
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             ''')
-            logging.info("Tabla LOGS_AUDITORIA creada correctamente.")
+            logging.info("Tabla LOGS_AUDITORIA asegurada.")
 
+            # --- NUEVA TABLA: Registro de Alertas del Escáner ---
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS registro_alertas (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo_alerta TEXT,
+                    nivel_riesgo TEXT,
+                    descripcion TEXT,
+                    fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            logging.info("Tabla registro_alertas asegurada.")
 
             # --- POBLADO INICIAL (SEEDING) ---
 
@@ -121,4 +134,3 @@ def inicializar_base_datos():
 if __name__ == "__main__":
     logging.info("Iniciando despliegue de arquitectura de datos...")
     inicializar_base_datos()
-
