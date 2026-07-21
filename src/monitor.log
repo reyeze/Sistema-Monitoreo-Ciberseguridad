@@ -209,3 +209,31 @@
 [2026-07-19 18:55:54] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
 [2026-07-19 18:55:54] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
 [2026-07-19 18:55:54] [!] ALERTA CRÍTICA: Modificación no autorizada en archivo: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-20 21:20:52] === INICIANDO SENSORES DE CIBERSEGURIDAD ===
+[2026-07-20 21:20:52] Iniciando escaneo de seguridad en IP: 127.0.0.1
+[2026-07-20 21:20:56] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-20 21:20:57] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-20 21:20:57] Sondeo de disponibilidad para 127.0.0.1:80...
+[2026-07-20 21:20:59] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
+[2026-07-20 21:20:59] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-20 21:20:59] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-20 21:20:59] Iniciando Monitor de Integridad de Archivos...
+[2026-07-20 21:21:00] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-20 21:21:00] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-20 21:21:00] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-20 21:21:00] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-20 21:21:00] [!] ALERTA CRÍTICA: Modificación no autorizada en archivo: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-20 21:34:37] === INICIANDO SENSORES DE CIBERSEGURIDAD ===
+[2026-07-20 21:34:37] Iniciando escaneo de seguridad en IP: 127.0.0.1
+[2026-07-20 21:34:41] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-20 21:34:42] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-20 21:34:42] Sondeo de disponibilidad para 127.0.0.1:80...
+[2026-07-20 21:34:44] [DOWN] El servicio en 127.0.0.1:80 NO RESPONDE.
+[2026-07-20 21:34:44] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-20 21:34:44] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-20 21:34:44] Iniciando Monitor de Integridad de Archivos...
+[2026-07-20 21:34:45] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-20 21:34:45] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-20 21:34:45] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-20 21:34:45] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-20 21:34:45] [!] ALERTA CRÍTICA: Modificación no autorizada en archivo: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt

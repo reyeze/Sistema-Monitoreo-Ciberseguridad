@@ -100,28 +100,50 @@ def obtener_integridad():
     except Exception as error:
         return jsonify({"error": "No se pudo conectar a la base de datos", "detalle": str(error)}), 500
 
-@app.route('/api/alertas')
+@app.route('/api/alertas', methods=['GET'])
 def obtener_alertas():
+    # Agrego el log de auditoría
+    registrar_log_auditoria('/api/alertas')
     try:
-        # Usar la misma ruta a tu base de datos (DB_PATH)
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        # Traemos las últimas 10 alertas ordenadas de la más reciente a la más antigua
-        cursor.execute("SELECT fecha_hora, tipo_alerta, nivel_riesgo, descripcion FROM registro_alertas ORDER BY fecha_hora DESC LIMIT 10")
+        conexion = conectar_bd()
+        cursor = conexion.cursor()
+
+        # Usamos SELECT * y rowid para evitar errores con los nombres de columnas de fecha
+        cursor.execute("SELECT * FROM registro_alertas ORDER BY rowid DESC LIMIT 30")
         filas = cursor.fetchall()
-        conn.close()
+        conexion.close()
 
         lista_alertas = []
+        vistos = set() # Conjunto para filtrar duplicados idénticos en ejecución
+
         for fila in filas:
-            lista_alertas.append({
-                "fecha": fila[0],
-                "tipo": fila[1],
-                "riesgo": fila[2],
-                "descripcion": fila[3]
-            })
-        return jsonify(lista_alertas)
+            # Convierto a diccionario normal de Python para evitar errores de objeto Row
+            fila_dict = dict(fila)
+
+            # Manejo flexible de nombres de columna para evitar fallos si cambia la BD
+            fecha_valor = fila_dict.get("fecha", fila_dict.get("fecha_hora", fila_dict.get("timestamp", "Fecha desconocida")))
+            tipo_valor = fila_dict.get("tipo_alerta", "Desconocido")
+            riesgo_valor = fila_dict.get("nivel_riesgo", "N/A")
+            desc_valor = fila_dict.get("descripcion", "Sin descripción")
+
+            # Identificador único para filtrar repeticiones visuales en el dashboard
+            identificador_unico = (fecha_valor, tipo_valor, riesgo_valor, desc_valor)
+
+            if identificador_unico not in vistos and len(lista_alertas) < 10:
+                vistos.add(identificador_unico)
+                lista_alertas.append({
+                    "fecha": fecha_valor,
+                    "tipo": tipo_valor,
+                    "riesgo": riesgo_valor,
+                    "descripcion": desc_valor
+                })
+
+        return jsonify(lista_alertas), 200
+
     except Exception as e:
-        return jsonify({"error": str(e)})
+        # Imprimo en consola para ver los errores si algo falla
+        print(f"[!] ERROR EN LA API DE ALERTAS: {e}")
+        return jsonify({"error": "Fallo en consulta BD", "detalle": str(e)}), 500
 
 
 if __name__ == '__main__':
