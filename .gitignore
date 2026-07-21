@@ -16,3 +16,5 @@ __pycache__/
 Reporte de avance.docx
 docs/
 *.pdf
+*.xlsx
+*.csv
