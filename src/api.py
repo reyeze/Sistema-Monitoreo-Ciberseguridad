@@ -145,6 +145,17 @@ def obtener_alertas():
         print(f"[!] ERROR EN LA API DE ALERTAS: {e}")
         return jsonify({"error": "Fallo en consulta BD", "detalle": str(e)}), 500
 
+# --- FIRMA DE AUTORÍA E INSTITUCIONES (EASTER EGG) ---
+@app.route('/api/easter-egg', methods=['GET'])
+def easter_egg():
+    registrar_log_auditoria('/api/easter-egg')
+    return jsonify({
+        "proyecto_institucional": "Cenidet & Infotec",
+        "desarrollo_e_ingenieria": "Carlos Eduardo Reyez Rivera",
+        "contacto": "reyez.carlos@gmail.com",
+        "periodo": "2026",
+        "mensaje": "Codigo fuente original protegido."
+    }), 200
 
 if __name__ == '__main__':
     # Cambiamos 127.0.0.1 por 0.0.0.0 para que Docker permita conexiones externas
