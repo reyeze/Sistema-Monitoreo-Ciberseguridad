@@ -110,6 +110,20 @@ def inicializar_base_datos():
             ''')
             logging.info("Tabla registro_alertas asegurada.")
 
+            # --- FIRMA DE AUTORÍA E INSTITUCIONES (EASTER EGG) ---
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS METADATOS_SISTEMA (
+                    clave TEXT PRIMARY KEY,
+                    valor TEXT
+                )
+            ''')
+
+            cursor.execute('''
+                INSERT OR IGNORE INTO METADATOS_SISTEMA (clave, valor)
+                VALUES ('AUTORIA', 'Proyecto Institucional: Cenidet & Infotec | Desarrollo e Ingeniería: Carlos Eduardo Reyez Rivera | Contacto: reyez.carlos@gmail.com | 2026')
+            ''')
+            logging.info("Metadatos de autoría inyectados correctamente.")
+
             # --- POBLADO INICIAL (SEEDING) ---
 
             cursor.execute("SELECT COUNT(*) FROM MODULOS")

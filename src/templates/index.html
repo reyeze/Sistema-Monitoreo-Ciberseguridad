@@ -159,11 +159,11 @@
 
                 tabla.innerHTML = ''; // Limpiamos la tabla
 
-                // Creamos un historial temporal para evitar pintar registros repetidos
+                // Historial temporal para evitar pintar registros repetidos
                 let registrosVistos = new Set();
 
                 puertos.forEach(evento => {
-                    // Validamos que exista el dato y que no lo hayamos visto ya
+                    // Validamos que exista el dato
                     if (evento.evidencia_tecnica && !registrosVistos.has(evento.evidencia_tecnica)) {
                         registrosVistos.add(evento.evidencia_tecnica);
 
