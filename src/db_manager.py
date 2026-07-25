@@ -44,6 +44,15 @@ def registrar_evento(id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecn
 # FUNCIONES DEL SENSOR DE INTEGRIDAD
 # =====================================================================
 
+def crear_tabla_integridad():
+    """Asegura la creación de la tabla de integridad antes de cualquier operación."""
+    conn = sqlite3.connect(RUTA_DB)
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS integridad_archivos
+                      (nombre TEXT PRIMARY KEY, hash_original TEXT)''')
+    conn.commit()
+    conn.close()
+
 # Función para guardar o actualizar el hash original (Línea base)
 def guardar_hash_base(nombre_archivo, hash_valor):
     conn = sqlite3.connect(RUTA_DB)
@@ -103,7 +112,9 @@ def registrar_alerta(tipo, riesgo, descripcion):
 if __name__ == "__main__":
     logging.info("Iniciando prueba de lógica de persistencia...")
 
+    # Creamos todas las tablas necesarias
     crear_tabla_alertas()
+    crear_tabla_integridad()
 
     # Simulación 1: El Escáner TCP detecta un puerto peligroso
     registrar_evento(
