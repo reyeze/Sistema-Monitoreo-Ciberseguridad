@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
@@ -20,11 +21,11 @@ def conectar_bd():
 # FUNCIÓN DE AUDITORÍA (Guardar en TXT)
 # ==========================================
 def registrar_log_auditoria(endpoint):
-    """Escribe en un archivo de texto dentro de la carpeta /data."""
+    """Escribe en un archivo de texto dentro de la carpeta /data con hora local exacta."""
     try:
         ruta_log = os.path.join(BASE_DIR, 'data', 'api_logs.txt')
         with open(ruta_log, "a") as f:
-            fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            fecha = datetime.now(ZoneInfo("America/Mexico_City")).strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"[{fecha}] Acceso al endpoint: {endpoint}\n")
     except Exception as e:
         print(f"[ERROR] No pude escribir en el archivo de log: {e}")
@@ -33,7 +34,6 @@ def registrar_log_auditoria(endpoint):
 # RUTAS DE LA API Y FRONTEND
 # ==========================================
 
-# Ruta principal que carga el Dashboard oscuro
 @app.route('/')
 def dashboard():
     return render_template('index.html')
@@ -53,7 +53,6 @@ def obtener_puertos():
         conexion = conectar_bd()
         cursor = conexion.cursor()
 
-        # Lógica de filtros y paginación
         filtro_estado = request.args.get('estado')
         filtro_riesgo = request.args.get('nivel_riesgo')
         limite = request.args.get('cantidad', default=50, type=int)
@@ -70,9 +69,7 @@ def obtener_puertos():
             consulta += " AND nivel_riesgo = ?"
             parametros.append(filtro_riesgo)
 
-        # OPTIMIZACIÓN: Se agrega GROUP BY para eliminar repeticiones de la vista
-        # y se ordena para mantener el evento más reciente arriba.
-        consulta += " GROUP BY evidencia_tecnica ORDER BY timestamp DESC LIMIT ? OFFSET ?"
+        consulta += " ORDER BY timestamp DESC LIMIT ? OFFSET ?"
         parametros.extend([limite, salto])
 
         cursor.execute(consulta, parametros)
@@ -102,32 +99,28 @@ def obtener_integridad():
 
 @app.route('/api/alertas', methods=['GET'])
 def obtener_alertas():
-    # Agrego el log de auditoría
     registrar_log_auditoria('/api/alertas')
     try:
         conexion = conectar_bd()
         cursor = conexion.cursor()
 
-        # Usamos SELECT * y rowid para evitar errores con los nombres de columnas de fecha
         cursor.execute("SELECT * FROM registro_alertas ORDER BY rowid DESC LIMIT 30")
         filas = cursor.fetchall()
         conexion.close()
 
         lista_alertas = []
-        vistos = set() # Conjunto para filtrar duplicados idénticos en ejecución
+        vistos = set()
 
         for fila in filas:
-            # Convierto a diccionario normal de Python para evitar errores de objeto Row
             fila_dict = dict(fila)
 
-            # Manejo flexible de nombres de columna para evitar fallos si cambia la BD
             fecha_valor = fila_dict.get("fecha", fila_dict.get("fecha_hora", fila_dict.get("timestamp", "Fecha desconocida")))
             tipo_valor = fila_dict.get("tipo_alerta", "Desconocido")
             riesgo_valor = fila_dict.get("nivel_riesgo", "N/A")
             desc_valor = fila_dict.get("descripcion", "Sin descripción")
 
-            # Identificador único para filtrar repeticiones visuales en el dashboard
-            identificador_unico = (fecha_valor, tipo_valor, riesgo_valor, desc_valor)
+            # SE QUITÓ 'fecha_valor' DE LA TUPLA PARA EVITAR DUPLICADOS POR FECHA
+            identificador_unico = (tipo_valor, riesgo_valor, desc_valor)
 
             if identificador_unico not in vistos and len(lista_alertas) < 10:
                 vistos.add(identificador_unico)
@@ -141,11 +134,9 @@ def obtener_alertas():
         return jsonify(lista_alertas), 200
 
     except Exception as e:
-        # Imprimo en consola para ver los errores si algo falla
         print(f"[!] ERROR EN LA API DE ALERTAS: {e}")
         return jsonify({"error": "Fallo en consulta BD", "detalle": str(e)}), 500
 
-# --- FIRMA DE AUTORÍA E INSTITUCIONES (EASTER EGG) ---
 @app.route('/api/easter-egg', methods=['GET'])
 def easter_egg():
     registrar_log_auditoria('/api/easter-egg')
@@ -158,5 +149,4 @@ def easter_egg():
     }), 200
 
 if __name__ == '__main__':
-    # Cambiamos 127.0.0.1 por 0.0.0.0 para que Docker permita conexiones externas
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -32,8 +32,6 @@ def inicializar_base_datos():
     """
     preparar_entorno()
 
-    # El uso de 'with' Manejador de Contexto garantiza que la base de datos
-    # se cierre de forma segura al terminar, incluso si ocurre un error.
     try:
         with sqlite3.connect(RUTA_DB) as conexion:
             cursor = conexion.cursor()
@@ -98,7 +96,7 @@ def inicializar_base_datos():
             ''')
             logging.info("Tabla LOGS_AUDITORIA asegurada.")
 
-            # --- NUEVA TABLA: Registro de Alertas del Escáner ---
+            # Tabla 6: Registro de Alertas del Escáner
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS registro_alertas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -109,6 +107,16 @@ def inicializar_base_datos():
                 )
             ''')
             logging.info("Tabla registro_alertas asegurada.")
+
+            # --- NUEVA: Tabla 7: Integridad de Archivos (Estandarizada) ---
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS integridad_archivos (
+                    archivo TEXT PRIMARY KEY,
+                    hash_sha256 TEXT,
+                    estado TEXT
+                )
+            ''')
+            logging.info("Tabla integridad_archivos asegurada.")
 
             # --- FIRMA DE AUTORÍA E INSTITUCIONES (EASTER EGG) ---
             cursor.execute('''
@@ -125,7 +133,6 @@ def inicializar_base_datos():
             logging.info("Metadatos de autoría inyectados correctamente.")
 
             # --- POBLADO INICIAL (SEEDING) ---
-
             cursor.execute("SELECT COUNT(*) FROM MODULOS")
             if cursor.fetchone()[0] == 0:
                 cursor.executemany('''

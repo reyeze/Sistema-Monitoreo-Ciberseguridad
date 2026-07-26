@@ -91,7 +91,7 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-puertos">
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -105,7 +105,7 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-archivos">
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -121,7 +121,7 @@
                     </tr>
                 </thead>
                 <tbody id="body-alertas">
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -149,21 +149,18 @@
             }
         }
 
-       // 2. Función: Llenar tabla de Puertos Abiertos
+        // 2. Función: Llenar tabla de Puertos Abiertos
         async function cargarPuertos() {
             try {
-                // Modificamos el endpoint para pedir menos datos y no saturar
                 const respuesta = await fetch('/api/puertos?cantidad=20');
                 const puertos = await respuesta.json();
                 const tabla = document.getElementById('tabla-puertos');
 
-                tabla.innerHTML = ''; // Limpiamos la tabla
+                tabla.innerHTML = '';
 
-                // Historial temporal para evitar pintar registros repetidos
                 let registrosVistos = new Set();
 
                 puertos.forEach(evento => {
-                    // Validamos que exista el dato
                     if (evento.evidencia_tecnica && !registrosVistos.has(evento.evidencia_tecnica)) {
                         registrosVistos.add(evento.evidencia_tecnica);
 
@@ -185,17 +182,19 @@
             }
         }
 
-        // 3. Función: Llenar tabla de Integridad de Archivos
+        // 3. Función: Llenar tabla de Integridad de Archivos (CORREGIDA)
         async function cargarArchivos() {
             try {
                 const respuesta = await fetch('/api/integridad');
                 const archivos = await respuesta.json();
                 const tabla = document.getElementById('tabla-archivos');
 
-                tabla.innerHTML = ''; // Limpiamos la tabla
+                tabla.innerHTML = '';
 
-                archivos.forEach(archivo => {
-                    let nombreArchivo = archivo.nombre;
+                archivos.forEach(item => {
+                    // SE CORRIGIÓ AQUÍ: Obtiene 'archivo' de la base de datos en vez de 'nombre'
+                    let nombreArchivo = item.archivo || item.nombre || 'Desconocido';
+
                     const fila = `<tr>
                         <td>${nombreArchivo}</td>
                         <td style="color: #4caf50;">Monitoreado (Hash OK)</td>
@@ -207,17 +206,16 @@
             }
         }
 
-        // 4. NUEVA FUNCIÓN: Llenar tabla de Alertas (Iteración 9)
+        // 4. Función: Llenar tabla de Alertas
         async function cargarAlertas() {
             try {
                 const respuesta = await fetch('/api/alertas');
                 const alertas = await respuesta.json();
                 const tabla = document.getElementById('body-alertas');
 
-                tabla.innerHTML = ''; // Limpiamos antes de actualizar
+                tabla.innerHTML = '';
 
                 alertas.forEach(alerta => {
-                    // Si el riesgo es Crítico lo pintamos rojo, si es Alto lo pintamos naranja
                     let colorRiesgo = alerta.riesgo === 'Crítico' ? '#ef5350' : '#ff9800';
 
                     const fila = `<tr>
@@ -238,7 +236,7 @@
             revisarEstadoAPI();
             cargarPuertos();
             cargarArchivos();
-            cargarAlertas(); // Arrancamos la carga de alertas
+            cargarAlertas();
 
             // Actualizar el estado cada 5 segundos
             setInterval(revisarEstadoAPI, 5000);
@@ -247,7 +245,7 @@
             setInterval(() => {
                 cargarPuertos();
                 cargarArchivos();
-                cargarAlertas(); // Se actualiza junto con el resto
+                cargarAlertas();
             }, 10000);
         };
     </script>

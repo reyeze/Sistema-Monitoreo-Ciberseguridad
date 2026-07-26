@@ -10,10 +10,16 @@ generados por los sensores, asegurando la integridad transaccional.
 import sqlite3
 import os
 import logging
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from logger import log
 
 # Configuración de mensajes en terminal
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+
+# Función para obtener la hora local exacta (México) de forma multiplataforma
+def obtener_tiempo_local():
+    return datetime.now(ZoneInfo("America/Mexico_City")).strftime("%Y-%m-%d %H:%M:%S")
 
 # Ruta de la base de datos (Dinámica y absoluta para evitar bases duplicadas)
 DIRECTORIO_ACTUAL = os.path.dirname(os.path.abspath(__file__))
@@ -45,65 +51,81 @@ def registrar_evento(id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecn
 # =====================================================================
 
 def crear_tabla_integridad():
-    """Asegura la creación de la tabla de integridad antes de cualquier operación."""
+    """Asegura la creación de la tabla de integridad con columnas estandarizadas."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS integridad_archivos
-                      (nombre TEXT PRIMARY KEY, hash_original TEXT)''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS integridad_archivos (
+            archivo TEXT PRIMARY KEY,
+            hash_sha256 TEXT,
+            estado TEXT
+        )
+    ''')
     conn.commit()
     conn.close()
 
-# Función para guardar o actualizar el hash original (Línea base)
 def guardar_hash_base(nombre_archivo, hash_valor):
+    """Guarda o actualiza el hash inicial de un archivo (Línea base)."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS integridad_archivos
-                      (nombre TEXT PRIMARY KEY, hash_original TEXT)''')
-    cursor.execute('''REPLACE INTO integridad_archivos (nombre, hash_original)
-                      VALUES (?, ?)''', (nombre_archivo, hash_valor))
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS integridad_archivos (
+            archivo TEXT PRIMARY KEY,
+            hash_sha256 TEXT,
+            estado TEXT
+        )
+    ''')
+    cursor.execute('''
+        INSERT OR REPLACE INTO integridad_archivos (archivo, hash_sha256, estado)
+        VALUES (?, ?, ?)
+    ''', (nombre_archivo, hash_valor, "Monitoreado (Hash OK)"))
     conn.commit()
     conn.close()
 
-# Función para obtener el hash original guardado
 def obtener_hash_base(nombre_archivo):
+    """Consulta el hash guardado previamente para un archivo específico."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
-    # Agregamos CREATE TABLE aquí por si se consulta antes de guardar algo
-    cursor.execute('''CREATE TABLE IF NOT EXISTS integridad_archivos
-                      (nombre TEXT PRIMARY KEY, hash_original TEXT)''')
-    cursor.execute("SELECT hash_original FROM integridad_archivos WHERE nombre = ?", (nombre_archivo,))
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS integridad_archivos (
+            archivo TEXT PRIMARY KEY,
+            hash_sha256 TEXT,
+            estado TEXT
+        )
+    ''')
+    cursor.execute("SELECT hash_sha256 FROM integridad_archivos WHERE archivo = ?", (nombre_archivo,))
     resultado = cursor.fetchone()
     conn.close()
     return resultado[0] if resultado else None
 
 # =====================================================================
-# NUEVAS FUNCIONES DE ALERTAS
+# FUNCIONES DE ALERTAS
 # =====================================================================
 def crear_tabla_alertas():
     """Crea la tabla unificada para registrar alertas de todos los módulos."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
-    # Alineado con la estructura de db_setup.py para mantener consistencia
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS registro_alertas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             tipo_alerta TEXT,
             nivel_riesgo TEXT,
             descripcion TEXT,
-            fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+            fecha DATETIME
         )
     ''')
     conn.commit()
     conn.close()
 
 def registrar_alerta(tipo, riesgo, descripcion):
-    """Guarda una alerta crítica o alta detectada por el sistema."""
+    """Guarda una alerta crítica o alta detectada por el sistema con hora local exacta."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
+    tiempo_actual = obtener_tiempo_local()
     cursor.execute('''
-        INSERT INTO registro_alertas (tipo_alerta, nivel_riesgo, descripcion)
-        VALUES (?, ?, ?)
-    ''', (tipo, riesgo, descripcion))
+        INSERT INTO registro_alertas (tipo_alerta, nivel_riesgo, descripcion, fecha)
+        VALUES (?, ?, ?, ?)
+    ''', (tipo, riesgo, descripcion, tiempo_actual))
     conn.commit()
     conn.close()
     logging.warning(f"ALERTA REGISTRADA [{riesgo}]: {descripcion}")
@@ -124,7 +146,7 @@ if __name__ == "__main__":
         evidencia_tecnica="Puerto: 445 | Estado: OPEN | Protocolo: TCP"
     )
 
-    # Simulación 2: Simulando la nueva alerta clasificada
+    # Simulación 2: Simulando la nueva alerta clasificada con fecha local
     registrar_alerta("Red", "Alto", "Puerto abierto innecesario detectado: 445 (SMB)")
 
     logging.info("Pruebas de persistencia finalizadas exitosamente.")

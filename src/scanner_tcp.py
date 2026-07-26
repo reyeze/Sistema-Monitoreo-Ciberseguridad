@@ -2,9 +2,9 @@
 Módulo Principal de Monitoreo (Red e Integridad)
 Proyecto: Sistema de monitoreo de riesgos de ciberseguridad
 
-Este script escanea puertos críticos, verifica la disponibilidad
-de servicios esenciales y monitorea la integridad de archivos
-sensibles utilizando rutas personalizadas.
+Este script actúa como el núcleo de ejecución continua, escaneando puertos críticos,
+verificando la disponibilidad de servicios esenciales y vigilando la integridad
+de archivos sensibles de forma autónoma mediante sondeos periódicos.
 """
 
 import socket
@@ -13,8 +13,16 @@ import sqlite3
 import os
 import platform
 import hashlib
+import time
 
-# Asegúrate de importar las nuevas funciones que pusimos en db_manager.py
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+# Obtención automática de la hora local exacta (México) sin desfase UTC en contenedores ni sistemas operativos
+def obtener_tiempo_local():
+    return datetime.now(ZoneInfo("America/Mexico_City")).strftime("%Y-%m-%d %H:%M:%S")
+
+# Importaciones de módulos internos
 from db_manager import registrar_evento, registrar_alerta, guardar_hash_base, obtener_hash_base
 from logger import log # Módulo de logs
 
@@ -26,7 +34,7 @@ DB_PATH = os.path.join(BASE_DIR, '..', 'data', 'ciberseguridad.db')
 if len(sys.argv) > 1:
     IP_OBJETIVO = sys.argv[1]
 else:
-    IP_OBJETIVO = '127.0.0.1'
+    IP_OBJETIVO = '192.168.3.4'
 
 PUERTOS_CRITICOS = {
     21: "FTP",
@@ -38,7 +46,10 @@ PUERTOS_CRITICOS = {
 }
 
 ID_MODULO_RED = 1
-ID_MODULO_INT = 2 # Agregamos un ID para el módulo de integridad
+ID_MODULO_INT = 2 # ID para el módulo de integridad
+
+# Intervalo de tiempo para el ciclo automático (en segundos)
+INTERVALO_CICLO = 30
 
 # --- FUNCIONES DE BASE DE DATOS Y ESTADO ---
 def esta_activado(id_modulo):
@@ -72,10 +83,10 @@ def escanear_puertos():
                 descripcion = f"Detección de puerto {puerto} ({servicio}) abierto."
                 evidencia = f"IP: {IP_OBJETIVO} | Puerto: {puerto} | Estado: OPEN"
 
-                # Guarda en la tabla general de las iteraciones pasadas
+                # Guarda en la tabla general de iteraciones
                 registrar_evento(ID_MODULO_RED, descripcion, "Alto", evidencia)
 
-                # NUEVO ITERACIÓN 9: Guarda en la tabla específica de alertas
+                # Guarda en la tabla específica de alertas
                 registrar_alerta("Red", "Alto", descripcion)
 
         except Exception:
@@ -99,7 +110,7 @@ def monitor_endpoint(host, puerto):
         log(f"[DOWN] Error al sondear {host}:{puerto} - {e}")
 
 
-# --- NUEVAS FUNCIONES SENSOR DE INTEGRIDAD (ITERACIÓN 9) ---
+# --- FUNCIONES SENSOR DE INTEGRIDAD ---
 def obtener_archivos_a_vigilar():
     archivos_finales = []
 
@@ -110,7 +121,7 @@ def obtener_archivos_a_vigilar():
     else:
         archivos_finales.append("/etc/hosts")
 
-    # 2. Leer archivo de texto personalizado (usando tu BASE_DIR)
+    # 2. Leer archivo de texto personalizado
     archivo_config = os.path.join(BASE_DIR, "archivos_custom.txt")
 
     if os.path.exists(archivo_config):
@@ -127,7 +138,6 @@ def obtener_archivos_a_vigilar():
     return archivos_finales
 
 def monitorear_integridad():
-    # Usamos tu misma lógica de validación
     if not esta_activado(ID_MODULO_INT):
         log(f"[*] El módulo de integridad está DESACTIVADO. Saltando ejecución.")
         return
@@ -148,7 +158,7 @@ def monitorear_integridad():
                     if not bloque:
                         break
                     sha256.update(bloque)
-            hash_actual = sha256.hexdigest()
+                hash_actual = sha256.hexdigest()
         except PermissionError:
             log(f"[-] Error de permisos al intentar leer: {ruta}")
             continue
@@ -169,17 +179,37 @@ def monitorear_integridad():
         else:
             log(f"[+] Integridad OK: {ruta}")
 
-# --- EJECUCIÓN PRINCIPAL ---
+# --- EJECUCIÓN PRINCIPAL CONTINUA (AUTOMATIZADA) ---
 if __name__ == '__main__':
-    log("=== INICIANDO SENSORES DE CIBERSEGURIDAD ===")
+    log("=== INICIANDO SERVICIO CONTINUO DE SENSORES DE CIBERSEGURIDAD ===")
+    log(f"[*] Modo autónomo activado. Intervalo de sondeo: {INTERVALO_CICLO} segundos.")
 
-    # 1. Sensor de Red
-    escanear_puertos()
+    while True:
+        try:
+            log("\n--------------------------------------------------")
+            log(">>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO")
+            log("--------------------------------------------------")
 
-    print("\n--- Iniciando Monitoreo de Disponibilidad ---")
-    monitor_endpoint(IP_OBJETIVO, 80)
-    monitor_endpoint("8.8.8.8", 53)
+            # 1. Sensor de Red
+            escanear_puertos()
 
-    print("\n--- Iniciando Monitoreo de Integridad ---")
-    # 2. Sensor de Integridad (Iteración 9)
-    monitorear_integridad()
+            log("\n--- Monitoreo de Disponibilidad de Endpoints ---")
+            monitor_endpoint(IP_OBJETIVO, 80)
+            monitor_endpoint("8.8.8.8", 53)
+
+            log("\n--- Monitoreo de Integridad de Archivos ---")
+            # 2. Sensor de Integridad
+            monitorear_integridad()
+
+            log("--------------------------------------------------")
+            log(f"[*] Ciclo finalizado. Esperando {INTERVALO_CICLO}s para la siguiente revisión...")
+            log("--------------------------------------------------\n")
+
+        except KeyboardInterrupt:
+            log("\n[!] Servicio detenido manualmente por el operador.")
+            sys.exit(0)
+        except Exception as error_ciclo:
+            log(f"[!] Error crítico en el bucle de ejecución: {error_ciclo}")
+
+        # Pausa autónoma antes de repetir el ciclo
+        time.sleep(INTERVALO_CICLO)
