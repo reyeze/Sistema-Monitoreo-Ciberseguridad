@@ -2,6 +2,7 @@ __pycache__/, venv/, .env
 # Bases de datos locales
 data/*.db
 *.sqlite3
+data/ciberseguridad.db
 
 # Archivos temporales de Python y entornos virtuales
 __pycache__/
@@ -18,3 +19,4 @@ docs/
 *.pdf
 *.xlsx
 *.csv
+*.log

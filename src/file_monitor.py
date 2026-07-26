@@ -1,6 +1,7 @@
 import os
 import hashlib
 import sqlite3
+import platform  # <-- Importado para detección del SO
 import db_manager
 import time
 from logger import log  # Importamos el log centralizado
@@ -13,15 +14,27 @@ def obtener_tiempo_local():
 
 # Definimos la ruta base del proyecto de forma dinámica
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(BASE_DIR, '..', 'data', 'ciberseguridad.db')
+DB_PATH = os.path.join(BASE_DIR, 'data', 'ciberseguridad.db')
 
 # Intervalo de tiempo para el monitoreo automático de integridad (en segundos)
 INTERVALO_MONITOREO = 30
 
+# ==========================================
+# CONFIGURACIÓN MULTIPLATAFORMA SEGÚN EL SO
+# ==========================================
+if platform.system() == "Windows":
+    RUTAS_DEFAULT = [
+        r"C:\Windows\System32\drivers\etc\hosts"
+    ]
+else:
+    RUTAS_DEFAULT = [
+        "/etc/hosts"
+    ]
+
 # --- INICIO DE LECTURA MULTIPLATAFORMA ---
 # Leemos los archivos a vigilar desde un archivo de texto externo
 RUTA_CUSTOM = os.path.join(BASE_DIR, 'src', 'archivos_custom.txt')
-ARCHIVOS_A_MONITOREAR = []
+ARCHIVOS_A_MONITOREAR = list(RUTAS_DEFAULT)
 
 if os.path.exists(RUTA_CUSTOM):
     with open(RUTA_CUSTOM, "r") as f:
@@ -29,9 +42,15 @@ if os.path.exists(RUTA_CUSTOM):
             nombre_archivo = linea.strip()
             # Ignoramos líneas vacías o comentarios que empiecen con #
             if nombre_archivo and not nombre_archivo.startswith("#"):
-                # os.path.join arma la ruta correcta según el sistema operativo
-                ruta_completa = os.path.join(BASE_DIR, 'src', nombre_archivo)
-                ARCHIVOS_A_MONITOREAR.append(ruta_completa)
+                # Si la línea ya es una ruta absoluta del sistema la usa tal cual,
+                # si es un archivo relativo le anexa el path de src/
+                if os.path.isabs(nombre_archivo):
+                    ruta_completa = nombre_archivo
+                else:
+                    ruta_completa = os.path.join(BASE_DIR, 'src', nombre_archivo)
+
+                if ruta_completa not in ARCHIVOS_A_MONITOREAR:
+                    ARCHIVOS_A_MONITOREAR.append(ruta_completa)
 else:
     log(f"[ERROR] No se encontró el archivo de configuración en: {RUTA_CUSTOM}")
 # --- FIN DE LECTURA MULTIPLATAFORMA ---
@@ -59,6 +78,7 @@ def iniciar_monitoreo():
         hash_actual = calcular_hash(ruta)
 
         if hash_actual is None:
+            log(f"[-] Archivo no encontrado (verifica ruta): {ruta}")
             continue
 
         # Usamos el adaptador para obtener el hash base
@@ -77,7 +97,8 @@ def iniciar_monitoreo():
             db_manager.registrar_alerta("Integridad", "Crítico", f"Modificación no autorizada en archivo: {nombre}")
 
         else:
-            # Aquí mostramos el hash solo en modo debug o si quieres verlo siempre
+            # Sincronizamos el estado de integridad en la BD para limpiar alertas previas
+            db_manager.guardar_hash_base(nombre, hash_actual)
             log(f"[OK] {nombre} intacto. Hash: {hash_actual[:16]}...")
 
 if __name__ == "__main__":

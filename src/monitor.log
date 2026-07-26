@@ -1232,3 +1232,278 @@
 [2026-07-25 21:53:01] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
 [2026-07-25 21:53:01] --------------------------------------------------
 
+[2026-07-25 21:53:31] 
+--------------------------------------------------
+[2026-07-25 21:53:31] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:53:31] --------------------------------------------------
+[2026-07-25 21:53:31] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:53:35] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:53:36] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:53:36] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:53:36] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:53:38] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:53:38] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:53:38] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:53:38] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:53:38] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:53:38] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:53:38] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:53:38] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:53:38] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:53:38] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:53:38] --------------------------------------------------
+[2026-07-25 21:53:38] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:53:38] --------------------------------------------------
+
+[2026-07-25 21:54:08] 
+--------------------------------------------------
+[2026-07-25 21:54:08] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:54:08] --------------------------------------------------
+[2026-07-25 21:54:08] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:54:12] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:54:13] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:54:13] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:54:13] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:54:15] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:54:15] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:54:15] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:54:15] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:54:15] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:54:15] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:54:15] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:54:15] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:54:15] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:54:15] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:54:15] --------------------------------------------------
+[2026-07-25 21:54:15] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:54:15] --------------------------------------------------
+
+[2026-07-25 21:54:45] 
+--------------------------------------------------
+[2026-07-25 21:54:45] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:54:45] --------------------------------------------------
+[2026-07-25 21:54:45] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:54:49] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:54:50] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:54:50] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:54:50] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:54:52] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:54:52] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:54:52] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:54:52] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:54:52] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:54:52] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:54:52] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:54:52] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:54:52] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:54:52] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:54:52] --------------------------------------------------
+[2026-07-25 21:54:52] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:54:52] --------------------------------------------------
+
+[2026-07-25 21:55:22] 
+--------------------------------------------------
+[2026-07-25 21:55:22] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:55:22] --------------------------------------------------
+[2026-07-25 21:55:22] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:55:26] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:55:28] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:55:28] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:55:28] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:55:30] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:55:30] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:55:30] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:55:30] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:55:30] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:55:30] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:55:30] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:55:30] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:55:30] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:55:30] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:55:30] --------------------------------------------------
+[2026-07-25 21:55:30] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:55:30] --------------------------------------------------
+
+[2026-07-25 21:56:00] 
+--------------------------------------------------
+[2026-07-25 21:56:00] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:56:00] --------------------------------------------------
+[2026-07-25 21:56:00] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:56:04] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:56:05] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:56:05] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:56:05] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:56:07] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:56:07] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:56:07] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:56:07] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:56:07] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:56:07] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:56:07] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:56:07] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:56:07] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:56:07] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:56:07] --------------------------------------------------
+[2026-07-25 21:56:07] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:56:07] --------------------------------------------------
+
+[2026-07-25 21:56:37] 
+--------------------------------------------------
+[2026-07-25 21:56:37] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:56:37] --------------------------------------------------
+[2026-07-25 21:56:37] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:56:41] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:56:42] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:56:42] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:56:42] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:56:44] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:56:44] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:56:44] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:56:44] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:56:44] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:56:44] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:56:44] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:56:44] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:56:44] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:56:44] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:56:44] --------------------------------------------------
+[2026-07-25 21:56:44] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:56:44] --------------------------------------------------
+
+[2026-07-25 21:57:14] 
+--------------------------------------------------
+[2026-07-25 21:57:14] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:57:14] --------------------------------------------------
+[2026-07-25 21:57:14] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:57:18] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:57:19] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:57:19] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:57:19] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:57:21] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:57:21] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:57:21] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:57:21] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:57:21] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:57:21] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:57:21] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:57:21] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:57:21] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:57:21] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:57:21] --------------------------------------------------
+[2026-07-25 21:57:21] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:57:21] --------------------------------------------------
+
+[2026-07-25 21:57:51] 
+--------------------------------------------------
+[2026-07-25 21:57:51] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:57:51] --------------------------------------------------
+[2026-07-25 21:57:51] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:57:55] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:57:57] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:57:57] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:57:57] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:57:59] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:57:59] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:57:59] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:57:59] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:57:59] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:57:59] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:57:59] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:57:59] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:57:59] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:57:59] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:57:59] --------------------------------------------------
+[2026-07-25 21:57:59] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:57:59] --------------------------------------------------
+
+[2026-07-25 21:58:29] 
+--------------------------------------------------
+[2026-07-25 21:58:29] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:58:29] --------------------------------------------------
+[2026-07-25 21:58:29] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:58:33] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:58:34] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:58:34] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:58:34] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:58:36] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:58:36] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:58:36] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:58:36] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:58:36] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:58:36] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:58:36] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:58:36] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:58:36] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:58:36] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:58:36] --------------------------------------------------
+[2026-07-25 21:58:36] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:58:36] --------------------------------------------------
+
+[2026-07-25 21:59:06] 
+--------------------------------------------------
+[2026-07-25 21:59:06] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:59:06] --------------------------------------------------
+[2026-07-25 21:59:06] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:59:10] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:59:11] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:59:11] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:59:11] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:59:13] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:59:13] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:59:13] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:59:13] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:59:13] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:59:13] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:59:13] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:59:13] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:59:13] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:59:13] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:59:13] --------------------------------------------------
+[2026-07-25 21:59:13] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:59:13] --------------------------------------------------
+
+[2026-07-25 21:59:43] 
+--------------------------------------------------
+[2026-07-25 21:59:43] >>> INICIANDO NUEVO CICLO DE MONITOREO AUTOMÁTICO
+[2026-07-25 21:59:43] --------------------------------------------------
+[2026-07-25 21:59:43] Iniciando escaneo de seguridad en IP: 192.168.3.4
+[2026-07-25 21:59:47] [!] ALERTA: Puerto 445 (SMB) EXPUESTO.
+[2026-07-25 21:59:48] --- Escaneo listo. Puertos abiertos: 1 ---
+[2026-07-25 21:59:48] 
+--- Monitoreo de Disponibilidad de Endpoints ---
+[2026-07-25 21:59:48] Sondeo de disponibilidad para 192.168.3.4:80...
+[2026-07-25 21:59:50] [DOWN] El servicio en 192.168.3.4:80 NO RESPONDE.
+[2026-07-25 21:59:50] Sondeo de disponibilidad para 8.8.8.8:53...
+[2026-07-25 21:59:50] [UP] El servicio en 8.8.8.8:53 está OPERATIVO.
+[2026-07-25 21:59:50] 
+--- Monitoreo de Integridad de Archivos ---
+[2026-07-25 21:59:50] Iniciando Monitor de Integridad de Archivos...
+[2026-07-25 21:59:50] [+] Integridad OK: C:\Windows\System32\drivers\etc\hosts
+[2026-07-25 21:59:50] [+] Integridad OK: C:\Windows\System32\drivers\etc\networks
+[2026-07-25 21:59:50] [+] Integridad OK: C:\xampp\apache\conf\httpd.conf
+[2026-07-25 21:59:50] [-] Archivo no encontrado (verifica ruta): C:\Users\Carlos\Documentos\Cenidet\config_db.ini
+[2026-07-25 21:59:50] [+] Integridad OK: C:\Users\Carlo\OneDrive\Documentos\Sistema_monitoreo_ciberseguridad\src\archivo_prueba.txt
+[2026-07-25 21:59:50] --------------------------------------------------
+[2026-07-25 21:59:50] [*] Ciclo finalizado. Esperando 30s para la siguiente revisión...
+[2026-07-25 21:59:50] --------------------------------------------------
+
