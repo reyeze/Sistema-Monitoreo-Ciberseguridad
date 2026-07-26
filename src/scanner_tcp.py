@@ -177,6 +177,8 @@ def monitorear_integridad():
             registrar_evento(ID_MODULO_INT, descripcion, "Crítico", f"Archivo: {ruta} | Hash Alterado")
             registrar_alerta("Integridad", "Crítico", descripcion)
         else:
+            # Sincronizamos el hash en la BD para que el Dashboard regrese a Hash OK al limpiar el archivo
+            guardar_hash_base(ruta, hash_actual)
             log(f"[+] Integridad OK: {ruta}")
 
 # --- EJECUCIÓN PRINCIPAL CONTINUA (AUTOMATIZADA) ---

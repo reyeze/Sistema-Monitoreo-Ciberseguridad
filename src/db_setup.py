@@ -66,7 +66,7 @@ def inicializar_base_datos():
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS EVENTOS_SEGURIDAD (
                     id_evento INTEGER PRIMARY KEY AUTOINCREMENT,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    timestamp DATETIME,
                     id_modulo INTEGER NOT NULL,
                     descripcion_evento TEXT NOT NULL,
                     nivel_riesgo TEXT NOT NULL,
@@ -91,7 +91,7 @@ def inicializar_base_datos():
                 CREATE TABLE IF NOT EXISTS LOGS_AUDITORIA (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     endpoint TEXT NOT NULL,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                    timestamp DATETIME
                 )
             ''')
             logging.info("Tabla LOGS_AUDITORIA asegurada.")
@@ -103,12 +103,12 @@ def inicializar_base_datos():
                     tipo_alerta TEXT,
                     nivel_riesgo TEXT,
                     descripcion TEXT,
-                    fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+                    fecha DATETIME
                 )
             ''')
             logging.info("Tabla registro_alertas asegurada.")
 
-            # --- NUEVA: Tabla 7: Integridad de Archivos (Estandarizada) ---
+            # --- Tabla 7: Integridad de Archivos (Estandarizada) ---
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS integridad_archivos (
                     archivo TEXT PRIMARY KEY,
@@ -118,7 +118,7 @@ def inicializar_base_datos():
             ''')
             logging.info("Tabla integridad_archivos asegurada.")
 
-            # --- FIRMA DE AUTORÍA E INSTITUCIONES (EASTER EGG) ---
+            # --- FIRMA DE AUTORÍA E INSTITUCIONES ---
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS METADATOS_SISTEMA (
                     clave TEXT PRIMARY KEY,

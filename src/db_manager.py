@@ -4,7 +4,7 @@ Proyecto: Sistema de monitoreo de riesgos de ciberseguridad
 
 Este script actúa como una capa de abstracción para la interacción con la base de datos.
 Provee las funciones necesarias para registrar la telemetría y eventos de seguridad
-generados por los sensores, asegurando la integridad transaccional.
+generados por los sensores, asegurando la integridad transaccional y horaria.
 """
 
 import sqlite3
@@ -12,7 +12,6 @@ import os
 import logging
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from logger import log
 
 # Configuración de mensajes en terminal
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
@@ -27,19 +26,33 @@ DIRECTORIO_RAIZ = os.path.dirname(DIRECTORIO_ACTUAL)
 RUTA_DB = os.path.join(DIRECTORIO_RAIZ, 'data', 'ciberseguridad.db')
 
 # =====================================================================
-# FUNCIONES DEL ESCÁNER TCP
+# FUNCIONES DEL ESCÁNER TCP Y EVENTOS
 # =====================================================================
 def registrar_evento(id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica):
-    """Inserta un nuevo evento de seguridad en la base de datos local."""
+    """Inserta un nuevo evento de seguridad en la base de datos local con la hora local de México."""
     try:
+        tiempo_actual = obtener_tiempo_local()
         with sqlite3.connect(RUTA_DB) as conexion:
             cursor = conexion.cursor()
+
+            # Verificamos/creamos la tabla asegurando el campo fecha_hora
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS EVENTOS_SEGURIDAD (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    fecha_hora DATETIME,
+                    id_modulo INTEGER,
+                    descripcion_evento TEXT,
+                    nivel_riesgo TEXT,
+                    evidencia_tecnica TEXT
+                )
+            ''')
+
             consulta = '''
                 INSERT INTO EVENTOS_SEGURIDAD
-                (id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
-                VALUES (?, ?, ?, ?)
+                (fecha_hora, id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
+                VALUES (?, ?, ?, ?, ?)
             '''
-            valores = (id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
+            valores = (tiempo_actual, id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
             cursor.execute(consulta, valores)
             conexion.commit()
             logging.info(f"Evento Registrado [Módulo {id_modulo}] - Riesgo: {nivel_riesgo} | Detalle: {descripcion_evento}")
@@ -49,7 +62,6 @@ def registrar_evento(id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecn
 # =====================================================================
 # FUNCIONES DEL SENSOR DE INTEGRIDAD
 # =====================================================================
-
 def crear_tabla_integridad():
     """Asegura la creación de la tabla de integridad con columnas estandarizadas."""
     conn = sqlite3.connect(RUTA_DB)
@@ -121,6 +133,7 @@ def registrar_alerta(tipo, riesgo, descripcion):
     """Guarda una alerta crítica o alta detectada por el sistema con hora local exacta."""
     conn = sqlite3.connect(RUTA_DB)
     cursor = conn.cursor()
+    crear_tabla_alertas()
     tiempo_actual = obtener_tiempo_local()
     cursor.execute('''
         INSERT INTO registro_alertas (tipo_alerta, nivel_riesgo, descripcion, fecha)
@@ -138,7 +151,7 @@ if __name__ == "__main__":
     crear_tabla_alertas()
     crear_tabla_integridad()
 
-    # Simulación 1: El Escáner TCP detecta un puerto peligroso
+    # Simulación 1: El Escáner TCP detecta un puerto peligroso con timestamp local
     registrar_evento(
         id_modulo=1,
         descripcion_evento="Detección de puerto 445 (SMB) expuesto en la red local.",
@@ -146,7 +159,7 @@ if __name__ == "__main__":
         evidencia_tecnica="Puerto: 445 | Estado: OPEN | Protocolo: TCP"
     )
 
-    # Simulación 2: Simulando la nueva alerta clasificada con fecha local
+    # Simulación 2: Alerta unificada registrada con fecha local
     registrar_alerta("Red", "Alto", "Puerto abierto innecesario detectado: 445 (SMB)")
 
     logging.info("Pruebas de persistencia finalizadas exitosamente.")
