@@ -35,21 +35,9 @@ def registrar_evento(id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecn
         with sqlite3.connect(RUTA_DB) as conexion:
             cursor = conexion.cursor()
 
-            # Verificamos/creamos la tabla asegurando el campo fecha_hora
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS EVENTOS_SEGURIDAD (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    fecha_hora DATETIME,
-                    id_modulo INTEGER,
-                    descripcion_evento TEXT,
-                    nivel_riesgo TEXT,
-                    evidencia_tecnica TEXT
-                )
-            ''')
-
             consulta = '''
                 INSERT INTO EVENTOS_SEGURIDAD
-                (fecha_hora, id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
+                (timestamp, id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
                 VALUES (?, ?, ?, ?, ?)
             '''
             valores = (tiempo_actual, id_modulo, descripcion_evento, nivel_riesgo, evidencia_tecnica)
