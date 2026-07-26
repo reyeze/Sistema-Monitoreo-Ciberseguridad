@@ -4,14 +4,20 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, request, render_template
 
-app = Flask(__name__)
-
 # ==========================================
-# CONFIGURACIÓN BASE DE DATOS
+# CONFIGURACIÓN DE RUTAS Y RUTAS DE TEMPLATES
 # ==========================================
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, 'data', 'ciberseguridad.db')
 
+# Se define la ruta absoluta explicita hacia la carpeta templates dentro de /src/templates
+TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+
+app = Flask(__name__, template_folder=TEMPLATES_DIR)
+
+# ==========================================
+# CONFIGURACIÓN BASE DE DATOS
+# ==========================================
 def conectar_bd():
     conexion = sqlite3.connect(DB_PATH)
     conexion.row_factory = sqlite3.Row
@@ -119,7 +125,7 @@ def obtener_alertas():
             riesgo_valor = fila_dict.get("nivel_riesgo", "N/A")
             desc_valor = fila_dict.get("descripcion", "Sin descripción")
 
-            # SE QUITÓ 'fecha_valor' DE LA TUPLA PARA EVITAR DUPLICADOS POR FECHA
+            # Desduplicado por tipo, riesgo y descripción (omitiendo fecha para evitar duplicados en la UI)
             identificador_unico = (tipo_valor, riesgo_valor, desc_valor)
 
             if identificador_unico not in vistos and len(lista_alertas) < 10:
