@@ -18,7 +18,7 @@ python3 src/actualizar_baseline.py
 
 # 4. Ejecutar escaneo de red inicial
 echo "[+] Ejecutando scanner_tcp.py..."
-python3 src/scanner_tcp.py
+python3 src/scanner_tcp.py &
 
 # 5. Levantar el monitor de archivos en segundo plano (opcional)
 echo "[+] Iniciando file_monitor.py en segundo plano..."

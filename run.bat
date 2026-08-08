@@ -1,6 +1,8 @@
 @echo off
+cd /d "%~dp0"
+
 echo ==================================================
-echo    INICIALIZANDO SISTEMA DE MONITOREO LOCAL
+echo     INICIALIZANDO SISTEMA DE MONITOREO LOCAL
 echo ==================================================
 
 :: 1. Configurar estructura base de la BD
@@ -21,7 +23,7 @@ python src\scanner_tcp.py
 
 :: 5. Levantar el monitor de archivos en paralelo
 echo [+] Iniciando file_monitor.py en paralelo...
-start cmd /k "python src\file_monitor.py"
+start cmd /k "cd /d "%~dp0" && python src\file_monitor.py"
 
 :: 6. Levantar la API y Dashboard web
 echo [+] Iniciando servidor API en http://localhost:5000 ...
