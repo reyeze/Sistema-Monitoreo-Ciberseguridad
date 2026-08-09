@@ -1,6 +1,26 @@
 @echo off
 cd /d "%~dp0"
 
+
+:: Activar el entorno virtual
+call .\.venv\Scripts\activate
+
+echo ==================================================
+echo     INICIALIZANDO SISTEMA DE MONITOREO LOCAL
+echo ==================================================
+
+:: 1. Configurar estructura base de la BD
+echo [+] Ejecutando db_setup.py...
+python src\db_setup.py
+
+:: ... (tus demás comandos se quedan igual) ...
+
+:: 6. Levantar la API y Dashboard web
+echo [+] Iniciando servidor API en http://localhost:5000 ...
+python src\api.py
+
+pause
+
 echo ==================================================
 echo     INICIALIZANDO SISTEMA DE MONITOREO LOCAL
 echo ==================================================
